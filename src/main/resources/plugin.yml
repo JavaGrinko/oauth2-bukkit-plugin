@@ -1,0 +1,11 @@
+name: OAuth2
+version: 1.0.0
+author: Artem Grinko <javagrinko@gmail.com>
+main: ru.javainside.oauth.OAuthPlugin
+description: OAuth2 login client
+website: http://javainside.ru
+softdepend: [PermissionsEx, Vault]
+commands:
+   login:
+      description: Login command.
+      usage: /<command> password

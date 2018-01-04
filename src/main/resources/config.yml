@@ -1,0 +1,6 @@
+oauth2:
+  base-url: http://localhost:8080
+  client-id: mine-server
+  client-secret: minecraft-secret
+  grant-path: /oauth/token
+  revoke-path: /oauth/revoke

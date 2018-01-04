@@ -1,0 +1,35 @@
+group 'ru.javainside'
+version '1.0.0'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        url 'http://nexus.hc.to/content/repositories/pub_releases'
+    }
+}
+
+
+jar {
+    manifest {
+        attributes "Main-Class": "ru.javainside.oauth.OAuthPlugin"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+    compile 'com.squareup.okhttp3:okhttp:3.9.1'
+    compileOnly 'org.projectlombok:lombok:1.16.18'
+    compileOnly 'net.milkbowl.vault:VaultAPI:1.6'
+    compileOnly 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
