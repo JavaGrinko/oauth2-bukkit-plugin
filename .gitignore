@@ -1,5 +1,6 @@
 /.idea/
-/build/
-!/build/libs/oauth2-bukkit-1.0.0.jar
 /.gradle/
 /out/
+/build/classes/
+/build/resources/
+/build/tmp/

@@ -1,0 +1,6 @@
+greeting: Добро пожаловать на сервер!
+ask-for-password: Введите §c/login §d<пароль> §7для входа
+login-success: Добро пожаловать на сервер!
+errors:
+  server-not-available: Сервер временно не работает
+  server-not-available-description: Сервер не работает. Попробуйте зайти позже.

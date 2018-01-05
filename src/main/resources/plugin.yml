@@ -9,3 +9,10 @@ commands:
    login:
       description: Login command.
       usage: /<command> password
+      permission: oauth2.login
+      permission-message: You don't have <permission> permission.
+   logout:
+      description: Logout from server.
+      usage: /<command>
+      permission: oauth2.logout
+      permission-message: You don't have <permission> permission.
