@@ -1,7 +1,17 @@
-group 'ru.javainside'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+}
+
+group 'ru.minejs'
 version '1.0.0'
 
 apply plugin: 'java'
+apply plugin: 'com.jfrog.bintray'
 
 sourceCompatibility = 1.8
 
@@ -15,6 +25,15 @@ repositories {
     }
 }
 
+bintray {
+    user = "$myBintrayUser"
+    key = "$myBintrayPasword"
+    configurations = ['archives']
+    pkg {
+        repo = 'maven'
+        name = project.name
+    }
+}
 
 jar {
     manifest {

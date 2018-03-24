@@ -1,6 +1,5 @@
 /.idea/
 /.gradle/
 /out/
-/build/classes/
-/build/resources/
-/build/tmp/
+/build/
+/oauth2-bukkit-plugin.iml
