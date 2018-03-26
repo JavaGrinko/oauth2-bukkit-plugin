@@ -14,7 +14,7 @@ public class Config {
     private String revokePath;
     private String language;
 
-    public Config(FileConfiguration configuration) {
+    Config(FileConfiguration configuration) {
         baseUrl = configuration.getString("oauth2.base-url");
         clientId = configuration.getString("oauth2.client-id");
         clientSecret = configuration.getString("oauth2.client-secret");

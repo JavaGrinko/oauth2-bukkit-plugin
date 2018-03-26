@@ -22,6 +22,7 @@ public class LoginCommandExecutor implements CommandExecutor {
 
     private final Config config;
     private final OkHttpClient client = new OkHttpClient();
+    private Gson gson = new GsonBuilder().create();
 
     public LoginCommandExecutor(JavaPlugin plugin, Config config) {
         this.config = config;
@@ -30,48 +31,47 @@ public class LoginCommandExecutor implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Player player = null;
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-        try {
-            if (!(sender instanceof Player) && args.length < 1)
-                return false;
-            player = (Player) sender;
-            String password = args[0];
-            RequestBody formBody = new FormBody.Builder()
-                    .add("grant_type", "password")
-                    .add("client_id", config.getClientId())
-                    .add("client_secret", config.getClientSecret())
-                    .add("username", player.getName())
-                    .add("password", password)
-                    .build();
-            Request request = new Request.Builder()
-                    .url(config.getBaseUrl() + config.getGrantPath())
-                    .post(formBody)
-                    .build();
-            Response response = client.newCall(request).execute();
-            Gson gson = new GsonBuilder().create();
-            OAuthResponse oauth = gson.fromJson(response.body().string(), OAuthResponse.class);
-            if (oauth.getError() != null) {
+        if (sender instanceof Player && args.length == 1) {
+            try {
+                Player player = (Player) sender;
+                String password = args[0];
+                RequestBody formBody = new FormBody.Builder()
+                        .add("grant_type", "password")
+                        .add("client_id", config.getClientId())
+                        .add("client_secret", config.getClientSecret())
+                        .add("username", player.getName())
+                        .add("password", password)
+                        .build();
+                Request request = new Request.Builder()
+                        .url(config.getBaseUrl() + config.getGrantPath())
+                        .post(formBody)
+                        .build();
+                Response response = client.newCall(request).execute();
+                OAuthResponse oauth = gson.fromJson(response.body().string(), OAuthResponse.class);
+                if (oauth.getError() != null) {
+                    pluginManager.callEvent(FailedLoginEvent.builder()
+                            .oauth(oauth)
+                            .player(player)
+                            .build());
+                } else {
+                    pluginManager.callEvent(SuccessLoginEvent.builder()
+                            .oauth(oauth)
+                            .player(player)
+                            .build());
+                }
+                return true;
+            } catch (IOException e) {
                 pluginManager.callEvent(FailedLoginEvent.builder()
-                        .oauth(oauth)
-                        .player(player)
+                        .oauth(OAuthResponse.builder()
+                                .error(Messages.getMessage("errors.server-not-available"))
+                                .errorDescription(Messages.getMessage("errors.server-not-available-description"))
+                                .build())
+                        .player((Player) sender)
                         .build());
-            } else {
-                pluginManager.callEvent(SuccessLoginEvent.builder()
-                        .oauth(oauth)
-                        .player(player)
-                        .build());
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            pluginManager.callEvent(FailedLoginEvent.builder()
-                    .oauth(OAuthResponse.builder()
-                            .error(Messages.getMessage("errors.server-not-available"))
-                            .errorDescription(Messages.getMessage("errors.server-not-available-description"))
-                            .build())
-                    .player(player)
-                    .build());
-            e.printStackTrace();
         }
-        return true;
+        return false;
     }
 }

@@ -1,5 +1,6 @@
 package ru.javainside.oauth;
 
+import lombok.Getter;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.javainside.oauth.commands.LoginCommandExecutor;
@@ -9,8 +10,10 @@ import ru.javainside.oauth.events.PlayerJoinEventListener;
 import ru.javainside.oauth.events.SuccessLoginEventListener;
 import ru.javainside.oauth.model.Messages;
 
-public class OAuthPlugin extends JavaPlugin {
 
+public class OAuthPlugin extends JavaPlugin {
+    
+    @Getter
     private Permission permissions;
 
     @Override
@@ -24,9 +27,5 @@ public class OAuthPlugin extends JavaPlugin {
         new FailedLoginEventListener(this);
         new LoginCommandExecutor(this, config);
         new LogoutCommandExecutor(this);
-    }
-
-    public Permission getPermissions() {
-        return permissions;
     }
 }

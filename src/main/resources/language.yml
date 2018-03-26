@@ -4,3 +4,4 @@ login-success: Добро пожаловать на сервер!
 errors:
   server-not-available: Сервер временно не работает
   server-not-available-description: Сервер не работает. Попробуйте зайти позже.
+  no-oauth-metadata: Вход не был произведен

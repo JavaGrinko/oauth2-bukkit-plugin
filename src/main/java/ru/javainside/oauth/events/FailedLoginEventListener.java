@@ -3,6 +3,8 @@ package ru.javainside.oauth.events;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import ru.javainside.oauth.model.Messages;
+import ru.javainside.oauth.model.OAuthResponse;
 
 import java.util.logging.Level;
 
@@ -17,8 +19,13 @@ public class FailedLoginEventListener implements Listener {
 
     @EventHandler
     private void onFailedLogin(FailedLoginEvent event) {
-        plugin.getLogger().log(Level.SEVERE, event.getOauth().getError());
-        plugin.getLogger().log(Level.SEVERE, event.getOauth().getErrorDescription());
-        event.getPlayer().kickPlayer(event.getOauth().getErrorDescription());
+        OAuthResponse oauth = event.getOauth();
+        if (oauth != null) {
+            plugin.getLogger().log(Level.SEVERE, oauth.getError());
+            plugin.getLogger().log(Level.SEVERE, oauth.getErrorDescription());
+            event.getPlayer().kickPlayer(oauth.getErrorDescription());
+        } else {
+            event.getPlayer().kickPlayer(Messages.getMessage("error.no-oauth-metadata"));
+        }
     }
 }

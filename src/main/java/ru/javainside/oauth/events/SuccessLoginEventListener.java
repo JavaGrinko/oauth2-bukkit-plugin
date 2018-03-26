@@ -1,7 +1,9 @@
 package ru.javainside.oauth.events;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.metadata.FixedMetadataValue;
 import ru.javainside.oauth.OAuthPlugin;
 import ru.javainside.oauth.model.Authority;
 import ru.javainside.oauth.model.Messages;
@@ -19,13 +21,15 @@ public class SuccessLoginEventListener implements Listener {
 
     @EventHandler
     public void onSuccessLogin(SuccessLoginEvent event) {
-        event.getPlayer().setWalkSpeed(0.2f);
+        Player player = event.getPlayer();
+        player.setWalkSpeed(0.2f);
+        player.setMetadata("oauth", new FixedMetadataValue(plugin, event.getOauth()));
         List<Authority> authorities = event.getOauth().getAuthorities();
         if (authorities != null) {
             for (Authority authority : authorities) {
-                plugin.getPermissions().playerAddGroup(event.getPlayer(), authority.getAuthority());
+                plugin.getPermissions().playerAddGroup(player, authority.getAuthority());
             }
         }
-        event.getPlayer().sendMessage(Messages.getMessage("login-success"));
+        player.sendMessage(Messages.getMessage("login-success"));
     }
 }
