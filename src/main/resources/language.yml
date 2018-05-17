@@ -1,5 +1,5 @@
 greeting: Добро пожаловать на сервер!
-ask-for-password: Введите §c/login §d<пароль> §7для входа
+ask-for-password: Введите §c/login §dлогин §dпароль §7для входа
 login-success: Добро пожаловать на сервер!
 errors:
   server-not-available: Сервер временно не работает

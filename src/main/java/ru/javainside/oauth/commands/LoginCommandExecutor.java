@@ -32,15 +32,16 @@ public class LoginCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-        if (sender instanceof Player && args.length == 1) {
+        if (sender instanceof Player && args.length == 2) {
             try {
                 Player player = (Player) sender;
-                String password = args[0];
+                String username = args[0];
+                String password = args[1];
                 RequestBody formBody = new FormBody.Builder()
                         .add("grant_type", "password")
                         .add("client_id", config.getClientId())
                         .add("client_secret", config.getClientSecret())
-                        .add("username", player.getName())
+                        .add("username", username)
                         .add("password", password)
                         .build();
                 Request request = new Request.Builder()
@@ -55,6 +56,7 @@ public class LoginCommandExecutor implements CommandExecutor {
                             .player(player)
                             .build());
                 } else {
+                    player.setDisplayName(username);
                     pluginManager.callEvent(SuccessLoginEvent.builder()
                             .oauth(oauth)
                             .player(player)

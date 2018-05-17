@@ -8,7 +8,7 @@ softdepend: [PermissionsEx, Vault]
 commands:
    login:
       description: Login command.
-      usage: /<command> password
+      usage: /<command> username password
       permission: oauth2.login
       permission-message: You don't have <permission> permission.
    logout:
