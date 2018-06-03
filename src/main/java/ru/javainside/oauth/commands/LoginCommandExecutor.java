@@ -57,6 +57,8 @@ public class LoginCommandExecutor implements CommandExecutor {
                             .build());
                 } else {
                     player.setDisplayName(username);
+                    player.setCustomName(username);
+                    player.setPlayerListName(username);
                     pluginManager.callEvent(SuccessLoginEvent.builder()
                             .oauth(oauth)
                             .player(player)
