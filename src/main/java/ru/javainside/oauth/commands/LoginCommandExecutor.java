@@ -1,8 +1,5 @@
 package ru.javainside.oauth.commands;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import okhttp3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,14 +12,14 @@ import ru.javainside.oauth.events.FailedLoginEvent;
 import ru.javainside.oauth.events.SuccessLoginEvent;
 import ru.javainside.oauth.model.Messages;
 import ru.javainside.oauth.model.OAuthResponse;
+import ru.javainside.oauth.service.OAuth2Service;
 
 import java.io.IOException;
 
 public class LoginCommandExecutor implements CommandExecutor {
 
     private final Config config;
-    private final OkHttpClient client = new OkHttpClient();
-    private Gson gson = new GsonBuilder().create();
+    private OAuth2Service oAuth2Service;
 
     public LoginCommandExecutor(JavaPlugin plugin, Config config) {
         this.config = config;
@@ -37,19 +34,10 @@ public class LoginCommandExecutor implements CommandExecutor {
                 Player player = (Player) sender;
                 String username = args[0];
                 String password = args[1];
-                RequestBody formBody = new FormBody.Builder()
-                        .add("grant_type", "password")
-                        .add("client_id", config.getClientId())
-                        .add("client_secret", config.getClientSecret())
-                        .add("username", username)
-                        .add("password", password)
-                        .build();
-                Request request = new Request.Builder()
-                        .url(config.getBaseUrl() + config.getGrantPath())
-                        .post(formBody)
-                        .build();
-                Response response = client.newCall(request).execute();
-                OAuthResponse oauth = gson.fromJson(response.body().string(), OAuthResponse.class);
+
+                OAuthResponse oauth = oAuth2Service.auth(username, password, config.getClientId(), config.getClientSecret(),
+                        config.getBaseUrl() + config.getGrantPath());
+
                 if (oauth.getError() != null) {
                     pluginManager.callEvent(FailedLoginEvent.builder()
                             .oauth(oauth)
