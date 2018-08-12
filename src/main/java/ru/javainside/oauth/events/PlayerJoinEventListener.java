@@ -5,7 +5,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
-import ru.javainside.oauth.model.Messages;
 
 import static ru.javainside.oauth.Config.LOGIN_PERMISSION;
 
@@ -23,8 +22,6 @@ public class PlayerJoinEventListener implements Listener {
         Player player = event.getPlayer();
         if (player.hasPermission(LOGIN_PERMISSION)) {
             player.setWalkSpeed(0);
-            player.sendMessage(Messages.getMessage("greeting"));
-            player.sendMessage(Messages.getMessage("ask-for-password"));
         }
     }
 }
