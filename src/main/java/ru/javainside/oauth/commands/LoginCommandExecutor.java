@@ -19,7 +19,7 @@ import java.io.IOException;
 public class LoginCommandExecutor implements CommandExecutor {
 
     private final Config config;
-    private OAuth2Service oAuth2Service;
+    private OAuth2Service oAuth2Service = new OAuth2Service();
 
     public LoginCommandExecutor(JavaPlugin plugin, Config config) {
         this.config = config;
@@ -34,10 +34,8 @@ public class LoginCommandExecutor implements CommandExecutor {
                 Player player = (Player) sender;
                 String username = args[0];
                 String password = args[1];
-
                 OAuthResponse oauth = oAuth2Service.auth(username, password, config.getClientId(), config.getClientSecret(),
                         config.getBaseUrl() + config.getGrantPath());
-
                 if (oauth.getError() != null) {
                     pluginManager.callEvent(FailedLoginEvent.builder()
                             .oauth(oauth)
